@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import fs from "node:fs";
 import { DataGeneratorFactory, generatedCsvData } from "./generators";
 import { writeCSV } from "./files";

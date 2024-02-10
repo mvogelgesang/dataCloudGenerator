@@ -1,13 +1,13 @@
 {
   "name": "@mvogelgesang/datacloudgenerator",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A node library to create dummy data and sync it to cloud storage",
   "main": "dist/index.js",
   "bin": {
     "dcGen": "dist/index.js"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "rm -rf dist/ && tsc",
     "start": "node dist/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
