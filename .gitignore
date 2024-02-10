@@ -1,0 +1,4 @@
+node_modules/
+dcGenerator_config.js
+dist/
+data/
