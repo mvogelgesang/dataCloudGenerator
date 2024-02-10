@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import fs from "node:fs";
+const path = require("path");
 import { DataGeneratorFactory, generatedCsvData } from "./generators";
 import { writeCSV } from "./files";
 import { localToS3 } from "./s3";
@@ -26,7 +27,9 @@ if (!fs.existsSync("dcGenerator_config.js")) {
   exit(1);
 }
 // read in values from the configuration file
-const config = require("../dcGenerator_config.js");
+// this file should be in the root of the project, this should work when this application is installed as an npm package
+const configPath = path.join(process.cwd(), 'dcGenerator_config.js');
+const config = require(configPath);
 
 // this fill will be called from npm run start and be passed two arguments. The first will be the data type which must be a valid schema type. The second will be the number of records to generate.
 let dataType = process.argv[2];
