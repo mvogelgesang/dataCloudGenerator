@@ -1,6 +1,6 @@
 {
   "name": "@mvogelgesang/datacloudgenerator",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A node library to create dummy data and sync it to cloud storage",
   "main": "dist/index.js",
   "bin": {
@@ -21,8 +21,10 @@
   ],
   "author": "mvogelgesang",
   "license": "ISC",
+  "dependencies": {
+    "@faker-js/faker": "^8.4.1"
+  },
   "devDependencies": {
-    "@faker-js/faker": "^8.4.1",
     "@types/node": "^20.11.16",
     "prettier": "^3.2.5",
     "typescript": "^5.3.3"
