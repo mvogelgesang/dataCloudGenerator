@@ -8,16 +8,24 @@ export class CustomerDataGenerator implements GenerateData {
   generateData(numRecords: number) {
     // Set the seed for the random number generator
     faker.seed(123);
-
+    const customerDate = faker.date.recent({ days: 60 });
     // Generate customer data and return it
-    const customerData = Array(numRecords)
+    const customerData: Customer[] = Array(numRecords)
       .fill(null)
       .map(() => {
         return {
-          customerId: faker.string.uuid(),
+          id: faker.string.uuid(),
           name: faker.person.fullName(),
           email: faker.internet.email(),
           address: faker.location.streetAddress(),
+          city: faker.location.city(),
+          postalCode: faker.location.zipCode(),
+          country: faker.location.country(),
+          createdAt: customerDate,
+          modifiedAt: faker.date.between({
+            from: customerDate,
+            to: faker.date.soon(),
+          }),
         };
       });
 
@@ -27,9 +35,11 @@ export class CustomerDataGenerator implements GenerateData {
 
   toCSV() {
     const csvArray: generatedCsvData[] = [];
-    const header: (keyof Customer)[] = Object.keys( this.data[0].data[0]) as (keyof Customer)[];
-    const rows = this.data[0].data.map(obj =>
-      header.map(fieldName => JSON.stringify(obj[fieldName])).join(",")
+    const header: (keyof Customer)[] = Object.keys(
+      this.data[0].data[0]
+    ) as (keyof Customer)[];
+    const rows = this.data[0].data.map((obj) =>
+      header.map((fieldName) => JSON.stringify(obj[fieldName])).join(",")
     );
     csvArray.push({
       data: [header.join(","), ...rows].join("\r\n"),

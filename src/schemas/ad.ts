@@ -3,5 +3,5 @@ export interface Ad {
   userId: string;
   createdAt: Date;
   location: string;
-  device: keyof ["Mobile","Desktop","Tablet"]
+  device: "Mobile" | "Desktop" | "Tablet";
 }

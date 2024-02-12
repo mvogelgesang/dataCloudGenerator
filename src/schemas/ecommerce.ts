@@ -5,6 +5,12 @@ export type Ecommerce = {
   page: string;
   product?: Product["id"];
   collection?: string;
-  action: keyof ["View", "Click", "Add to Cart", "Checkout Complete", "Checkout Start", "Remove from Cart"];
+  action:
+    | "Add to Cart"
+    | "Checkout Complete"
+    | "Checkout Start"
+    | "Click"
+    | "Remove from Cart"
+    | "View";
   createdAt: Date;
 };

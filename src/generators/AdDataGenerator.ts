@@ -7,12 +7,12 @@ export class AdDataGenerator implements GenerateData {
 
   generateData(numRecords: number) {
     // Generate ad data and return it
-    const dataArray = Array(numRecords).fill(null).map(() => {
+    const dataArray: Ad[] = Array(numRecords).fill(null).map(() => {
       return {
         adId: faker.string.uuid(),
         userId: faker.string.uuid(),
-        timestamp: faker.date.recent(),
-        location: faker.address.country(),
+        createdAt: faker.date.recent(),
+        location: faker.location.country(),
         device: faker.helpers.arrayElement(['Mobile', 'Desktop', 'Tablet']),
       };
     });

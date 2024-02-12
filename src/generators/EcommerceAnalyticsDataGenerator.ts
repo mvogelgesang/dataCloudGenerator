@@ -25,7 +25,7 @@ export class EcommerceAnalyticsDataGenerator implements GenerateData {
             "Add to Cart",
             "Purchase",
           ]),
-          timestamp: faker.date.recent(),
+          createdAt: faker.date.recent(),
         };
       });
     this.data = [{ data: ecommerceArray, type: "ecommerce" }];
