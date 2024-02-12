@@ -1,3 +1,5 @@
 node_modules/
 dcGenerator_config.js
-dist/!dist/
+!dist/
+data/
+src/
