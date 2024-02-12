@@ -64,7 +64,6 @@ export class StorePurchaseDataGenerator implements GenerateData {
         type: data.type,
       });
     }
-    console.log(csvArray);
     return csvArray;
   }
 }

@@ -1,12 +1,15 @@
 import { exec } from "node:child_process";
+import { DCGeneratorConfig } from "..";
+
 
 export function localToS3(
-  localFilePath: string,
-  bucketName: string,
-  profile: string
+  fileName: string,
+  localFolderPath: string,
+  dataType: string,
+  config: DCGeneratorConfig
 ) {
   exec(
-    `aws s3 cp ${localFilePath} s3://${bucketName}/${localFilePath} --profile ${profile}`,
+    `aws s3 cp ${localFolderPath}/${fileName} s3://${config.awsBucketName}/${dataType}/${fileName} --profile ${config.awsProfileName}`,
     (error: any, stdout: any, stderr: any) => {
       if (error) {
         console.error(`Error: ${error.message}`);
