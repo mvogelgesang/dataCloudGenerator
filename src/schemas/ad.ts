@@ -1,7 +1,7 @@
 export interface Ad {
   adId: string;
   userId: string;
-  timestamp: Date;
+  createdAt: Date;
   location: string;
   device: keyof ["Mobile","Desktop","Tablet"]
 }

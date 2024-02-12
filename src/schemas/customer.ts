@@ -6,4 +6,6 @@ export interface Customer {
   city: string;
   postalCode: string;
   country: string;
+  createdAt: Date;
+  modifiedAt: Date;
 }

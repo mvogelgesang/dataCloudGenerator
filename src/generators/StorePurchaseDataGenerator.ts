@@ -20,7 +20,7 @@ export class StorePurchaseDataGenerator implements GenerateData {
         loyaltyId: faker.string.uuid(),
         total: 0,
         createdAt: storePurchaseDate,
-        updatedAt: faker.date.between({
+        modifiedAt: faker.date.between({
           from: storePurchaseDate,
           to: faker.date.soon(),
         }),
@@ -33,7 +33,7 @@ export class StorePurchaseDataGenerator implements GenerateData {
         quantity: faker.number.int(10),
         price: faker.number.float({ min: 1, max: 150, fractionDigits: 2 }),
         createdAt: storePurchaseDate,
-        updatedAt: faker.date.between({
+        modifiedAt: faker.date.between({
           from: storePurchaseDate,
           to: faker.date.soon(),
         }),

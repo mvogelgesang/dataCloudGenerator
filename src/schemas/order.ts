@@ -3,7 +3,7 @@ export interface Order {
   customerId: string;
   totalPrice: number;
   createdAt: Date;
-  lastModified: Date;
+  modifiedAt: Date;
 }
 
 

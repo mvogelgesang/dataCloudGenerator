@@ -4,5 +4,5 @@ export interface StorePurchase {
   loyaltyId: string;
   total: number;
   createdAt: Date;
-  updatedAt: Date;
+  modifiedAt: Date;
 }

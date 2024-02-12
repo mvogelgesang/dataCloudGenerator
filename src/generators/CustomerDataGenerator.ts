@@ -17,11 +17,11 @@ export class CustomerDataGenerator implements GenerateData {
           customerId: faker.string.uuid(),
           name: faker.person.fullName(),
           email: faker.internet.email(),
-          address: faker.address.streetAddress(),
+          address: faker.location.streetAddress(),
         };
       });
 
-    this.data = [{ data: customerData, type: "Customer" }];
+    this.data = [{ data: customerData, type: "customer" }];
     return this.data;
   }
 

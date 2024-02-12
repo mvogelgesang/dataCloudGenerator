@@ -5,5 +5,5 @@ export interface StorePurchaseItem {
   quantity: number;
   price: number;
   createdAt: Date;
-  updatedAt: Date;
+  modifiedAt: Date;
 }

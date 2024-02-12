@@ -17,7 +17,7 @@ export class AdDataGenerator implements GenerateData {
       };
     });
 
-    this.data = [{ data: dataArray, type: 'Ad' }];
+    this.data = [{ data: dataArray, type: 'ad' }];
     return this.data;
   }
 

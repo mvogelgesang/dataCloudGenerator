@@ -1,6 +1,5 @@
 import { faker } from "@faker-js/faker";
-import { Order } from "../schemas/order";
-import { OrderItem } from "../schemas/order-item";
+import { Order, OrderItem } from "../schemas/";
 import { GenerateData, generatedData, generatedCsvData } from "./GenerateData";
 
 export class OrderDataGenerator implements GenerateData {
@@ -17,7 +16,7 @@ export class OrderDataGenerator implements GenerateData {
         customerId: faker.string.uuid(),
         totalPrice: 0,
         createdAt: orderDate,
-        lastModified: faker.date.between({
+        modifiedAt: faker.date.between({
           from: orderDate,
           to: faker.date.soon(),
         }),
@@ -28,6 +27,8 @@ export class OrderDataGenerator implements GenerateData {
         productId: faker.commerce.isbn(),
         quantity: faker.number.int(10),
         price: faker.number.float({ min: 1, max: 150, fractionDigits: 2 }),
+        createdAt: orderDate,
+        modifiedAt: orderDate,
       };
       orderItems.data.push(orderItem);
       order.totalPrice += orderItem.price * orderItem.quantity;

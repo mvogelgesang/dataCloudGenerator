@@ -4,4 +4,6 @@ export interface OrderItem {
   productId: string;
   quantity: number;
   price: number;
+  createdAt: Date;
+  modifiedAt: Date;
 }

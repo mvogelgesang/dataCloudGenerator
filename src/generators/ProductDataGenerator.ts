@@ -6,6 +6,8 @@ export class ProductDataGenerator implements GenerateData {
   data: generatedData[] = [];
   generateData(count: number) {
     faker.seed(123);
+    const productDate = faker.date.recent({ days: 2 });
+
     const products: Product[] = [];
 
     for (let i = 0; i < count; i++) {
@@ -14,12 +16,17 @@ export class ProductDataGenerator implements GenerateData {
         description: faker.commerce.productDescription(),
         name: faker.commerce.productName(),
         price: faker.number.float({ min: 1, max: 150, fractionDigits: 2 }),
+        createdAt: productDate,
+        modifiedAt: faker.date.between({
+          from: productDate,
+          to: faker.date.soon(),
+        })
       };
 
       products.push(product);
     }
 
-    this.data = [{ data: products, type: 'Product' }];
+    this.data = [{ data: products, type: 'product' }];
     return this.data;
   }
   toCSV(): generatedCsvData[] {
