@@ -40,7 +40,7 @@ if (!dataType) {
   dataType = dataType.toLowerCase();
 }
 // check that datatype is a valid schema type
-const validDataTypes = ["ad", "customer", "ecommerce", "order", "product"];
+const validDataTypes = ["ad", "customer", "ecommerce", "order", "product", "store-purchase"];
 if (!validDataTypes.includes(dataType)) {
   throw new Error(
     `Invalid data type: ${dataType}. Must be one of: ${validDataTypes.join(
