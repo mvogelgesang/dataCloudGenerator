@@ -33,8 +33,7 @@ export class OrderDataGenerator implements GenerateData {
       order.totalPrice += orderItem.price * orderItem.quantity;
       orders.data.push(order);
     }
-    console.log("Generated Order data");
-    console.log(orders.data); 
+
     this.data = [orders, orderItems];
     return this.data;
   }
@@ -48,9 +47,14 @@ export class OrderDataGenerator implements GenerateData {
     for (const data of this.data) {
       const header = Object.keys(data.data[0]);
       const rows = data.data.map((obj: any) =>
-        header.map((fieldName: string) => JSON.stringify(obj[fieldName])).join(",")
+        header
+          .map((fieldName: string) => JSON.stringify(obj[fieldName]))
+          .join(",")
       );
-      csvArray.push({data:[header.join(","), ...rows].join("\r\n"), type: this.data[0].type});
+      csvArray.push({
+        data: [header.join(","), ...rows].join("\r\n"),
+        type: data.type,
+      });
     }
 
     return csvArray;

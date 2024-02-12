@@ -4,6 +4,7 @@ import { AdDataGenerator } from "./AdDataGenerator";
 import { CustomerDataGenerator } from "./CustomerDataGenerator";
 import { EcommerceAnalyticsDataGenerator } from "./EcommerceAnalyticsDataGenerator";
 import { ProductDataGenerator } from "./ProductDataGenerator";
+import { StorePurchaseDataGenerator } from "./StorePurchaseDataGenerator";
 export default class DataGeneratorFactory {
   static createDataGenerator(type: string): GenerateData | null {
     console.log("Creating data generator for type:", type);
@@ -14,10 +15,12 @@ export default class DataGeneratorFactory {
         return new CustomerDataGenerator();
       case "ecommerce":
         return new EcommerceAnalyticsDataGenerator();
+        case "order":
+          return new OrderDataGenerator();
       case "product":
         return new ProductDataGenerator();
-      case "order":
-        return new OrderDataGenerator();
+      case "store-purchase":
+        return new StorePurchaseDataGenerator();
       default:
         return null;
     }

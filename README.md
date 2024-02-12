@@ -16,6 +16,22 @@ module.exports = {
   };
 ```
 
+## Data Model
+
+```mermaid
+erDiagram
+    CUSTOMER ||--o{ ORDER : "places an online"
+    CUSTOMER ||--o{ STORE-PURCHASE : "makes a"
+    STORE-PURCHASE ||--|{ STORE-PURCHASE-ITEM: "has"
+    PRODUCT ||--o{ STORE-PURCHASE-ITEM : "has"
+    ORDER ||--|{ ORDER-ITEM : includes
+    PRODUCT ||--o{ ORDER-ITEM : "ordered in"
+    AD }o--o{ CUSTOMER: "viewed by"
+    ECOMMERCE-ANALYTICS }o--o{ PRODUCT: "interacted"
+    ECOMMERCE-ANALYTICS }o--o{ CUSTOMER: "interacted"
+    STORE ||--|{ STORE-PURCHASE: "made at"
+```
+
 ## Use
 
 `dcGen` is the global namespace followed by the data type and the number of records you want to generate. If the number of records is blank, it defaults to 10.
@@ -34,3 +50,6 @@ Generate Order and Order Item data
 
 Generate Product data
 `dcGen product 100`
+
+Generate Store Purchase data
+`dcGen store-purchase 3`

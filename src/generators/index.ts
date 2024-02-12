@@ -7,6 +7,7 @@ import { EcommerceAnalyticsDataGenerator } from "./EcommerceAnalyticsDataGenerat
 import { GenerateData,generatedData, generatedCsvData } from "./GenerateData";
 import { OrderDataGenerator } from "./OrderDataGenerator";
 import { ProductDataGenerator } from "./ProductDataGenerator";
+import { StorePurchaseDataGenerator } from "./StorePurchaseDataGenerator";
 
 export {
   AdDataGenerator,
@@ -18,4 +19,5 @@ export {
   generatedCsvData,
   OrderDataGenerator,
   ProductDataGenerator,
+  StorePurchaseDataGenerator
 };
