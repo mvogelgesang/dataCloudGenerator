@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import fs from "node:fs";
 const path = require("path");
-import { DataGeneratorFactory, generatedCsvData } from "./generators";
+import { DataGeneratorFactory, GeneratedCsvData } from "./generators";
 import { writeCSV } from "./files";
 import { localToS3 } from "./s3";
 import { exit } from "node:process";
@@ -66,11 +66,26 @@ if (!validDataTypes.includes(dataType)) {
 const numRecords = process.argv[3] ? parseInt(process.argv[3]) : 10;
 console.log(`Generating ${numRecords} records of type ${dataType}`);
 const dataGenerator = DataGeneratorFactory.createDataGenerator(dataType);
-const data = dataGenerator?.generateData(numRecords);
-const csvArray: generatedCsvData[] | undefined = dataGenerator?.toCSV();
-if (csvArray) {
-  for (const item of csvArray) {
-    const fileData = writeCSV(item.type, item.data);
-    localToS3(fileData.fileName, fileData.dir, fileData.dataType, config);
+if (Array.isArray(dataGenerator)) {
+  dataGenerator.forEach((generator) => {
+    const data = generator.generateData(numRecords);
+    const csvArray: GeneratedCsvData[] | undefined = generator.toCSV(data);
+    if (csvArray) {
+      for (const item of csvArray) {
+        const fileData = writeCSV(item.type, item.data);
+        localToS3(fileData.fileName, fileData.dir, fileData.dataType, config);
+      }
+    }
+  });
+} else if (dataGenerator) {
+  const data = dataGenerator?.generateData(numRecords);
+  const csvArray: GeneratedCsvData[] | undefined = dataGenerator?.toCSV(data);
+  if (csvArray) {
+    for (const item of csvArray) {
+      const fileData = writeCSV(item.type, item.data);
+      localToS3(fileData.fileName, fileData.dir, fileData.dataType, config);
+    }
+  } else {
+    throw new Error("No data generated");
   }
 }

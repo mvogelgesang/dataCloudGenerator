@@ -1,11 +1,9 @@
 import { faker } from "@faker-js/faker";
-import { AbstractDataGenerator, generatedCsvData, generatedData } from "./GenerateData";
+import { AbstractDataGenerator, DataGenerator, GeneratedCsvData, GeneratedData } from "./GenerateData";
 import { Customer } from "../schemas/customer";
 
-export class CustomerDataGenerator extends AbstractDataGenerator {
-  data: generatedData[] = [];
-
-  generateData(numRecords: number, seed: boolean = false) {
+export class CustomerDataGenerator extends AbstractDataGenerator<Customer> {
+  generateData(numRecords: number, seed: boolean = false): GeneratedData<Customer> {
     if (seed) {
       faker.seed(this.seedValue);
     }
@@ -30,21 +28,20 @@ export class CustomerDataGenerator extends AbstractDataGenerator {
         };
       });
 
-    this.data = [{ data: customerData, type: "customer" }];
-    return this.data;
+    return { data: customerData, type: "customer" };
   }
 
-  toCSV() {
-    const csvArray: generatedCsvData[] = [];
+  toCSV(createdData: GeneratedData<Customer>) {
+    const csvArray: GeneratedCsvData[] = [];
     const header: (keyof Customer)[] = Object.keys(
-      this.data[0].data[0]
+      createdData.data[0]
     ) as (keyof Customer)[];
-    const rows = this.data[0].data.map((obj) =>
+    const rows = createdData.data.map((obj) =>
       header.map((fieldName) => JSON.stringify(obj[fieldName])).join(",")
     );
     csvArray.push({
       data: [header.join(","), ...rows].join("\r\n"),
-      type: this.data[0].type,
+      type: createdData.type,
     });
     return csvArray;
   }

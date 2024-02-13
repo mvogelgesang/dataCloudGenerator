@@ -4,7 +4,7 @@ import { AdDataGenerator } from "./AdDataGenerator";
 import { CustomerDataGenerator } from "./CustomerDataGenerator";
 import DataGeneratorFactory from "./DataGeneratorFactory";
 import { EcommerceAnalyticsDataGenerator } from "./EcommerceAnalyticsDataGenerator";
-import { AbstractDataGenerator,generatedData, generatedCsvData } from "./GenerateData";
+import { AbstractDataGenerator,GeneratedData, GeneratedCsvData } from "./GenerateData";
 import { OrderDataGenerator } from "./OrderDataGenerator";
 import { ProductDataGenerator } from "./ProductDataGenerator";
 import { StorePurchaseDataGenerator } from "./StorePurchaseDataGenerator";
@@ -15,8 +15,8 @@ export {
   CustomerDataGenerator,
   DataGeneratorFactory,
   EcommerceAnalyticsDataGenerator,
-  generatedData,
-  generatedCsvData,
+  GeneratedData,
+  GeneratedCsvData,
   OrderDataGenerator,
   ProductDataGenerator,
   StorePurchaseDataGenerator

@@ -1,25 +1,23 @@
 import { faker } from "@faker-js/faker";
 import { Order, OrderItem } from "../schemas/";
-import { AbstractDataGenerator, generatedData, generatedCsvData } from "./GenerateData";
+import { AbstractDataGenerator, GeneratedData, GeneratedCsvData } from "./GenerateData";
+import { CustomerDataGenerator } from "./CustomerDataGenerator";
 
-export class OrderDataGenerator extends AbstractDataGenerator {
-
-  data: generatedData[] = [];
-  
+export class OrderDataGenerator extends AbstractDataGenerator<Order | OrderItem>{
   generateData(count: number, seed: boolean = false) {
     if (seed) {
       faker.seed(this.seedValue);
     }
-    
-    const orders: generatedData = { data: [], type: "order" };
-    const orderItems: generatedData = { data: [], type: "order-item" };
+    const customers = new CustomerDataGenerator().generateData(200, true);
+    const orders: Order[] = [];
+    const orderItems: OrderItem[] = [];
 
     for (let i = 0; i < count; i++) {
       const orderDate = faker.date.recent({ days: 2 });
       const orderId = faker.string.hexadecimal({ length: 10, casing: 'upper' });
       const order: Order = {
         id: orderId,
-        customerId: faker.string.uuid(),
+        customerId: faker.helpers.arrayElement(customers.data).id,
         totalPrice: 0,
         createdAt: orderDate,
         modifiedAt: faker.date.between({
@@ -37,22 +35,21 @@ export class OrderDataGenerator extends AbstractDataGenerator {
         createdAt: orderDate,
         modifiedAt: orderDate,
       };
-      orderItems.data.push(orderItem);
+      orderItems.push(orderItem);
       order.totalPrice += orderItem.price * orderItem.quantity;
-      orders.data.push(order);
+      orders.push(order);
     }
 
-    this.data = [orders, orderItems];
-    return this.data;
+    return [{ data: orders, type: "order" }, { data: orderItems, type: "order-item" }];
   }
 
-  toCSV() {
+  toCSV(createdData: GeneratedData<Order|OrderItem>[]) {
     // Convert the data to CSV format
 
     // this.data is an array of generatedData objects, and each object has a data property that is an array of objects. This function should return an array containing CSV's of each generatedData object's data property.
-    const csvArray: generatedCsvData[] = [];
+    const csvArray: GeneratedCsvData[] = [];
 
-    for (const data of this.data) {
+    for (const data of createdData) {
       const header = Object.keys(data.data[0]);
       const rows = data.data.map((obj: any) =>
         header

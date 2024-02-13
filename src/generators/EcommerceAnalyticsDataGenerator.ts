@@ -1,10 +1,8 @@
 import { faker } from "@faker-js/faker";
 import { Ecommerce } from "../schemas/ecommerce";
-import { AbstractDataGenerator, generatedCsvData, generatedData } from "./GenerateData";
+import { AbstractDataGenerator, GeneratedCsvData, GeneratedData } from "./GenerateData";
 
-export class EcommerceAnalyticsDataGenerator extends AbstractDataGenerator {
-  data: generatedData[] = [];
-
+export class EcommerceAnalyticsDataGenerator extends AbstractDataGenerator<Ecommerce> {
   generateData(numRecords: number, seed: boolean = false) {
     if (seed) {
       faker.seed(this.seedValue);
@@ -33,22 +31,21 @@ export class EcommerceAnalyticsDataGenerator extends AbstractDataGenerator {
           createdAt: faker.date.recent(),
         };
       });
-    this.data = [{ data: ecommerceArray, type: "ecommerce" }];
-    return this.data;
+    return { data: ecommerceArray, type: "ecommerce" };
   }
 
-  toCSV() {
-    const csvArray: generatedCsvData[] = [];
+  toCSV(createdData: GeneratedData<Ecommerce>) {
+    const csvArray: GeneratedCsvData[] = [];
     const header: (keyof Ecommerce)[] = Object.keys(
-      this.data[0].data[0]
+      createdData.data[0]
     ) as (keyof Ecommerce)[];
 
-    const rows = this.data[0].data.map(obj =>
+    const rows = createdData.data.map(obj =>
       header.map((fieldName) => JSON.stringify(obj[fieldName])).join(",")
     );
     csvArray.push({
       data: [header.join(","), ...rows].join("\r\n"),
-      type: this.data[0].type,
+      type: createdData.type,
     });
     return csvArray;
   }
