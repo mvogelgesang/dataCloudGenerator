@@ -1,11 +1,14 @@
 import { faker } from "@faker-js/faker";
 import { Ad } from "../schemas/ad";
-import { GenerateData, generatedCsvData, generatedData } from "./GenerateData";
+import { AbstractDataGenerator, generatedCsvData, generatedData } from "./GenerateData";
 
-export class AdDataGenerator implements GenerateData {
+export class AdDataGenerator extends AbstractDataGenerator {
   data: generatedData[] = [];
 
-  generateData(numRecords: number) {
+  generateData(numRecords: number, seed: boolean = false) {
+    if (seed) {
+      faker.seed(this.seedValue);
+    }
     // Generate ad data and return it
     const dataArray: Ad[] = Array(numRecords).fill(null).map(() => {
       return {

@@ -1,4 +1,4 @@
-import { GenerateData, generatedData } from "./GenerateData";
+import { DataGenerator } from "./GenerateData";
 import { OrderDataGenerator } from "./OrderDataGenerator";
 import { AdDataGenerator } from "./AdDataGenerator";
 import { CustomerDataGenerator } from "./CustomerDataGenerator";
@@ -6,7 +6,8 @@ import { EcommerceAnalyticsDataGenerator } from "./EcommerceAnalyticsDataGenerat
 import { ProductDataGenerator } from "./ProductDataGenerator";
 import { StorePurchaseDataGenerator } from "./StorePurchaseDataGenerator";
 export default class DataGeneratorFactory {
-  static createDataGenerator(type: string): GenerateData | null {
+  
+  static createDataGenerator(type: string): DataGenerator | null {
     console.log("Creating data generator for type:", type);
     switch (type) {
       case "ad":

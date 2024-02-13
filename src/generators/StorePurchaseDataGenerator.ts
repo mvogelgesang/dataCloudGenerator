@@ -1,11 +1,15 @@
 import { faker } from "@faker-js/faker";
 import { StorePurchase, StorePurchaseItem } from "../schemas";
-import { GenerateData, generatedData, generatedCsvData } from "./GenerateData";
+import { AbstractDataGenerator, generatedData, generatedCsvData } from "./GenerateData";
 
-export class StorePurchaseDataGenerator implements GenerateData {
+export class StorePurchaseDataGenerator extends AbstractDataGenerator {
   data: generatedData[] = [];
-  generateData(count: number) {
-    console.log("Generating StorePurchase data");
+  
+  generateData(count: number, seed: boolean = false) {
+    if (seed) {
+      faker.seed(this.seedValue);
+    }
+
     const storePurchases: generatedData = { data: [], type: "store-purchase" };
     const storePurchaseItems: generatedData = {
       data: [],

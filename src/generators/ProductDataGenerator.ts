@@ -1,11 +1,15 @@
 import {faker} from '@faker-js/faker';
-import { GenerateData, generatedCsvData, generatedData } from './GenerateData';
+import { AbstractDataGenerator, generatedCsvData, generatedData } from './GenerateData';
 import { Product } from '../schemas/product';
 
-export class ProductDataGenerator implements GenerateData {
+export class ProductDataGenerator extends AbstractDataGenerator {
+  // create a constructor that sets the seed property to a string, this should be an optional parameter
   data: generatedData[] = [];
-  generateData(count: number) {
-    faker.seed(123);
+  
+  generateData(count: number, seed: boolean = false) {
+    if (seed) {
+      faker.seed(this.seedValue);
+    }
     const productDate = faker.date.recent({ days: 2 });
 
     const products: Product[] = [];

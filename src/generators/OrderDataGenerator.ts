@@ -1,18 +1,24 @@
 import { faker } from "@faker-js/faker";
 import { Order, OrderItem } from "../schemas/";
-import { GenerateData, generatedData, generatedCsvData } from "./GenerateData";
+import { AbstractDataGenerator, generatedData, generatedCsvData } from "./GenerateData";
 
-export class OrderDataGenerator implements GenerateData {
+export class OrderDataGenerator extends AbstractDataGenerator {
+
   data: generatedData[] = [];
-  generateData(count: number) {
-    console.log("Generating Order data");
+  
+  generateData(count: number, seed: boolean = false) {
+    if (seed) {
+      faker.seed(this.seedValue);
+    }
+    
     const orders: generatedData = { data: [], type: "order" };
     const orderItems: generatedData = { data: [], type: "order-item" };
 
     for (let i = 0; i < count; i++) {
       const orderDate = faker.date.recent({ days: 2 });
+      const orderId = faker.string.hexadecimal({ length: 10, casing: 'upper' });
       const order: Order = {
-        id: i,
+        id: orderId,
         customerId: faker.string.uuid(),
         totalPrice: 0,
         createdAt: orderDate,
@@ -24,6 +30,7 @@ export class OrderDataGenerator implements GenerateData {
 
       const orderItem: OrderItem = {
         id: faker.string.uuid(),
+        orderId: orderId,
         productId: faker.commerce.isbn(),
         quantity: faker.number.int(10),
         price: faker.number.float({ min: 1, max: 150, fractionDigits: 2 }),

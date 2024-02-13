@@ -1,13 +1,14 @@
 import { faker } from "@faker-js/faker";
-import { GenerateData, generatedCsvData, generatedData } from "./GenerateData";
+import { AbstractDataGenerator, generatedCsvData, generatedData } from "./GenerateData";
 import { Customer } from "../schemas/customer";
 
-export class CustomerDataGenerator implements GenerateData {
+export class CustomerDataGenerator extends AbstractDataGenerator {
   data: generatedData[] = [];
 
-  generateData(numRecords: number) {
-    // Set the seed for the random number generator
-    faker.seed(123);
+  generateData(numRecords: number, seed: boolean = false) {
+    if (seed) {
+      faker.seed(this.seedValue);
+    }
     const customerDate = faker.date.recent({ days: 60 });
     // Generate customer data and return it
     const customerData: Customer[] = Array(numRecords)

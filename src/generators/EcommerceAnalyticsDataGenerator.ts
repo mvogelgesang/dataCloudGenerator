@@ -1,13 +1,16 @@
 import { faker } from "@faker-js/faker";
 import { Ecommerce } from "../schemas/ecommerce";
-import { GenerateData, generatedCsvData, generatedData } from "./GenerateData";
+import { AbstractDataGenerator, generatedCsvData, generatedData } from "./GenerateData";
 
-export class EcommerceAnalyticsDataGenerator implements GenerateData {
+export class EcommerceAnalyticsDataGenerator extends AbstractDataGenerator {
   data: generatedData[] = [];
 
-  generateData(numRecords: number) {
+  generateData(numRecords: number, seed: boolean = false) {
+    if (seed) {
+      faker.seed(this.seedValue);
+    }
     // Generate ecommerce data and return it
-    const ecommerceArray = Array(numRecords)
+    const ecommerceArray: Ecommerce[] = Array(numRecords)
       .fill(null)
       .map(() => {
         return {
@@ -20,10 +23,12 @@ export class EcommerceAnalyticsDataGenerator implements GenerateData {
             "Checkout",
           ]),
           action: faker.helpers.arrayElement([
-            "View",
-            "Click",
             "Add to Cart",
-            "Purchase",
+            "Checkout Complete",
+            "Checkout Start",
+            "Click",
+            "Remove from Cart",
+            "View",
           ]),
           createdAt: faker.date.recent(),
         };
