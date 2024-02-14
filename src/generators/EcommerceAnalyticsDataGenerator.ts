@@ -1,49 +1,53 @@
 import { faker } from "@faker-js/faker";
-import { Ecommerce } from "../schemas/ecommerce";
-import { GenerateData, generatedCsvData, generatedData } from "./GenerateData";
+import { Ecommerce, PageActionMapType, pageActionMap } from "../schemas/ecommerce";
+import { AbstractDataGenerator, GeneratedCsvData, GeneratedData } from "./GenerateData";
+import { ProductDataGenerator } from "./ProductDataGenerator";
+import { CustomerDataGenerator } from "./CustomerDataGenerator";
 
-export class EcommerceAnalyticsDataGenerator implements GenerateData {
-  data: generatedData[] = [];
+export class EcommerceAnalyticsDataGenerator extends AbstractDataGenerator<Ecommerce> {
+  generateData(numRecords: number, seed: boolean = false) {
+    if (seed) {
+      faker.seed(this.seedValue);
+    }
+    // generate product data to fill in the product field
+    const products = new ProductDataGenerator().generateData(200, true).data;
+    const customers = new CustomerDataGenerator().generateData(200, true).data;
 
-  generateData(numRecords: number) {
     // Generate ecommerce data and return it
-    const ecommerceArray = Array(numRecords)
+    const ecommerceArray: Ecommerce[] = Array(numRecords)
       .fill(null)
       .map(() => {
+        const page = faker.helpers.arrayElement([
+          "Home",
+          "Product",
+          "Cart",
+          "Checkout",
+        ]) as unknown as keyof PageActionMapType;
+        const actionArray = pageActionMap[page];
         return {
-          userId: faker.string.uuid(),
+          customerId: faker.helpers.arrayElement(customers).id,
           sessionId: faker.string.uuid(),
-          page: faker.helpers.arrayElement([
-            "Home",
-            "Product",
-            "Cart",
-            "Checkout",
-          ]),
-          action: faker.helpers.arrayElement([
-            "View",
-            "Click",
-            "Add to Cart",
-            "Purchase",
-          ]),
+          page: page,
+          product: page === "Product" ? faker.helpers.arrayElement(products).id : "",
+          action: faker.helpers.arrayElement(actionArray),
           createdAt: faker.date.recent(),
         };
       });
-    this.data = [{ data: ecommerceArray, type: "ecommerce" }];
-    return this.data;
+    return { data: ecommerceArray, type: "ecommerce" };
   }
 
-  toCSV() {
-    const csvArray: generatedCsvData[] = [];
+  toCSV(createdData: GeneratedData<Ecommerce>) {
+    const csvArray: GeneratedCsvData[] = [];
     const header: (keyof Ecommerce)[] = Object.keys(
-      this.data[0].data[0]
+      createdData.data[0]
     ) as (keyof Ecommerce)[];
 
-    const rows = this.data[0].data.map(obj =>
+    const rows = createdData.data.map(obj =>
       header.map((fieldName) => JSON.stringify(obj[fieldName])).join(",")
     );
     csvArray.push({
       data: [header.join(","), ...rows].join("\r\n"),
-      type: this.data[0].type,
+      type: createdData.type,
     });
     return csvArray;
   }

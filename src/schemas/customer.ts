@@ -1,5 +1,6 @@
 export interface Customer {
   id: string;
+  loyaltyId: string;
   name: string;
   email: string;
   address: string;

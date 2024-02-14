@@ -1,12 +1,16 @@
-import {faker} from '@faker-js/faker';
-import { GenerateData, generatedCsvData, generatedData } from './GenerateData';
-import { Product } from '../schemas/product';
+import { faker } from "@faker-js/faker";
+import {
+  AbstractDataGenerator,
+  GeneratedCsvData,
+  GeneratedData,
+} from "./GenerateData";
+import { Product } from "../schemas/product";
 
-export class ProductDataGenerator implements GenerateData {
-  data: generatedData[] = [];
-  generateData(count: number) {
-    faker.seed(123);
-    const productDate = faker.date.recent({ days: 2 });
+
+export class ProductDataGenerator extends AbstractDataGenerator<Product> {
+  generateData(count: number, seed: boolean = false) {
+    // for the purposes of this library, seed is always needed for products.
+    faker.seed(this.seedValue);
 
     const products: Product[] = [];
 
@@ -16,24 +20,27 @@ export class ProductDataGenerator implements GenerateData {
         description: faker.commerce.productDescription(),
         name: faker.commerce.productName(),
         price: faker.number.float({ min: 1, max: 150, fractionDigits: 2 }),
-        createdAt: productDate,
-        modifiedAt: faker.date.between({
-          from: productDate,
-          to: faker.date.soon(),
-        })
+        createdAt: faker.date.recent({ days: 2, refDate: "2024-01-01T00:00:00.000Z"}),
+        modifiedAt: new Date(),
       };
 
       products.push(product);
     }
 
-    this.data = [{ data: products, type: 'product' }];
-    return this.data;
+    return { data: products, type: "product" };
   }
-  toCSV(): generatedCsvData[] {
-    const csvArray: generatedCsvData[] = [];
-    const header: (keyof Product)[] = Object.keys(this.data[0].data[0]) as (keyof Product)[];
-    const rows = this.data[0].data.map(obj => header.map((fieldName) => JSON.stringify(obj[fieldName])).join(','));
-    csvArray.push({data:[header.join(','), ...rows].join('\r\n'), type: this.data[0].type});
+  toCSV(createdData: GeneratedData<Product>): GeneratedCsvData[] {
+    const csvArray: GeneratedCsvData[] = [];
+    const header: (keyof Product)[] = Object.keys(
+      createdData.data[0]
+    ) as (keyof Product)[];
+    const rows = createdData.data.map((obj) =>
+      header.map((fieldName) => JSON.stringify(obj[fieldName])).join(",")
+    );
+    csvArray.push({
+      data: [header.join(","), ...rows].join("\r\n"),
+      type: createdData.type,
+    });
 
     return csvArray;
   }

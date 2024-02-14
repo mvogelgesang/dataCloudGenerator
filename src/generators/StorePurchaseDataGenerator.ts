@@ -1,23 +1,23 @@
 import { faker } from "@faker-js/faker";
 import { StorePurchase, StorePurchaseItem } from "../schemas";
-import { GenerateData, generatedData, generatedCsvData } from "./GenerateData";
+import { AbstractDataGenerator, GeneratedData, GeneratedCsvData } from "./GenerateData";
+import { CustomerDataGenerator } from "./CustomerDataGenerator";
 
-export class StorePurchaseDataGenerator implements GenerateData {
-  data: generatedData[] = [];
-  generateData(count: number) {
-    console.log("Generating StorePurchase data");
-    const storePurchases: generatedData = { data: [], type: "store-purchase" };
-    const storePurchaseItems: generatedData = {
-      data: [],
-      type: "store-purchase-item",
-    };
+export class StorePurchaseDataGenerator extends AbstractDataGenerator<StorePurchase|StorePurchaseItem> { 
+  generateData(count: number, seed: boolean = false): GeneratedData<StorePurchase|StorePurchaseItem>[]{
+    if (seed) {
+      faker.seed(this.seedValue);
+    }
+    const customers = new CustomerDataGenerator().generateData(200, true);
+    const storePurchases: StorePurchase[] = []
+    const storePurchaseItems: StorePurchaseItem[] = [];
 
     for (let i = 0; i < count; i++) {
       const storePurchaseDate = faker.date.recent({ days: 2 });
       const storePurchase: StorePurchase = {
         id: faker.string.uuid(),
         storeId: faker.location.buildingNumber(),
-        loyaltyId: faker.string.uuid(),
+        loyaltyId: faker.helpers.arrayElement(customers.data).loyaltyId,
         total: 0,
         createdAt: storePurchaseDate,
         modifiedAt: faker.date.between({
@@ -38,21 +38,20 @@ export class StorePurchaseDataGenerator implements GenerateData {
           to: faker.date.soon(),
         }),
       };
-      storePurchaseItems.data.push(storePurchaseItem);
+      storePurchaseItems.push(storePurchaseItem);
       storePurchase.total +=
         storePurchaseItem.price * storePurchaseItem.quantity;
-      storePurchases.data.push(storePurchase);
+      storePurchases.push(storePurchase);
     }
-    this.data = [storePurchases, storePurchaseItems];
-    return this.data;
+    return [{data: storePurchases, type: "store-purchase" }, {data: storePurchaseItems, type: "store-purchase-item" }];
   }
 
-  toCSV() {
+  toCSV(createdData: GeneratedData<StorePurchase|StorePurchaseItem>[]) {
     // Convert the data to CSV format
     // this.data is an array of generatedData objects, and each object has a data property that is an array of objects. This function should return an array containing CSV's of each generatedData object's data property.
-    const csvArray: generatedCsvData[] = [];
+    const csvArray: GeneratedCsvData[] = [];
 
-    for (const data of this.data) {
+    for (const data of createdData) {
       const header = Object.keys(data.data[0]);
       const rows = data.data.map((obj: any) =>
         header

@@ -1,6 +1,6 @@
 {
   "name": "@mvogelgesang/datacloudgenerator",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "A node library to create dummy data and sync it to cloud storage",
   "main": "dist/index.js",
   "bin": {
