@@ -1,33 +1,35 @@
 import { faker } from "@faker-js/faker";
-import { Ecommerce } from "../schemas/ecommerce";
+import { Ecommerce, PageActionMapType, pageActionMap } from "../schemas/ecommerce";
 import { AbstractDataGenerator, GeneratedCsvData, GeneratedData } from "./GenerateData";
+import { ProductDataGenerator } from "./ProductDataGenerator";
+import { CustomerDataGenerator } from "./CustomerDataGenerator";
 
 export class EcommerceAnalyticsDataGenerator extends AbstractDataGenerator<Ecommerce> {
   generateData(numRecords: number, seed: boolean = false) {
     if (seed) {
       faker.seed(this.seedValue);
     }
+    // generate product data to fill in the product field
+    const products = new ProductDataGenerator().generateData(200, true).data;
+    const customers = new CustomerDataGenerator().generateData(200, true).data;
+
     // Generate ecommerce data and return it
     const ecommerceArray: Ecommerce[] = Array(numRecords)
       .fill(null)
       .map(() => {
+        const page = faker.helpers.arrayElement([
+          "Home",
+          "Product",
+          "Cart",
+          "Checkout",
+        ]) as unknown as keyof PageActionMapType;
+        const actionArray = pageActionMap[page];
         return {
-          userId: faker.string.uuid(),
+          customerId: faker.helpers.arrayElement(customers).id,
           sessionId: faker.string.uuid(),
-          page: faker.helpers.arrayElement([
-            "Home",
-            "Product",
-            "Cart",
-            "Checkout",
-          ]),
-          action: faker.helpers.arrayElement([
-            "Add to Cart",
-            "Checkout Complete",
-            "Checkout Start",
-            "Click",
-            "Remove from Cart",
-            "View",
-          ]),
+          page: page,
+          product: page === "Product" ? faker.helpers.arrayElement(products).id : "",
+          action: faker.helpers.arrayElement(actionArray),
           createdAt: faker.date.recent(),
         };
       });

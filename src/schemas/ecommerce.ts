@@ -1,16 +1,23 @@
 import { Product } from "./";
-export type Ecommerce = {
-  userId: string;
+export type Ecommerce<P extends keyof PageActionMapType = keyof PageActionMapType> = {
+  customerId: string;
   sessionId: string;
-  page: string;
+  page: P;
   product?: Product["id"];
-  collection?: string;
-  action:
-    | "Add to Cart"
-    | "Checkout Complete"
-    | "Checkout Start"
-    | "Click"
-    | "Remove from Cart"
-    | "View";
+  action: string;
   createdAt: Date;
+};
+
+export type PageActionMapType = {
+  Home: ["View"],
+  Product: ["View", "Add to Cart"],
+  Cart: ["View", "Remove from Cart"],
+  Checkout: ["Checkout Start", "Checkout Complete"],
+};
+
+export const pageActionMap: PageActionMapType = {
+  Home: ["View"],
+  Product: ["View", "Add to Cart"],
+  Cart: ["View", "Remove from Cart"],
+  Checkout: ["Checkout Start", "Checkout Complete"],
 };
