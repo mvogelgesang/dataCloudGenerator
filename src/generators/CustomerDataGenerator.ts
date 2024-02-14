@@ -13,6 +13,7 @@ export class CustomerDataGenerator extends AbstractDataGenerator<Customer> {
       .map(() => {
         return {
           id: faker.string.uuid(),
+          loyaltyId: faker.string.numeric({allowLeadingZeros: true, length: 15}),
           name: faker.person.fullName(),
           email: faker.internet.email(),
           address: faker.location.streetAddress(),

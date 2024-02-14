@@ -1,13 +1,14 @@
 import { faker } from "@faker-js/faker";
 import { StorePurchase, StorePurchaseItem } from "../schemas";
 import { AbstractDataGenerator, GeneratedData, GeneratedCsvData } from "./GenerateData";
+import { CustomerDataGenerator } from "./CustomerDataGenerator";
 
 export class StorePurchaseDataGenerator extends AbstractDataGenerator<StorePurchase|StorePurchaseItem> { 
   generateData(count: number, seed: boolean = false): GeneratedData<StorePurchase|StorePurchaseItem>[]{
     if (seed) {
       faker.seed(this.seedValue);
     }
-
+    const customers = new CustomerDataGenerator().generateData(200, true);
     const storePurchases: StorePurchase[] = []
     const storePurchaseItems: StorePurchaseItem[] = [];
 
@@ -16,7 +17,7 @@ export class StorePurchaseDataGenerator extends AbstractDataGenerator<StorePurch
       const storePurchase: StorePurchase = {
         id: faker.string.uuid(),
         storeId: faker.location.buildingNumber(),
-        loyaltyId: faker.string.uuid(),
+        loyaltyId: faker.helpers.arrayElement(customers.data).loyaltyId,
         total: 0,
         createdAt: storePurchaseDate,
         modifiedAt: faker.date.between({
