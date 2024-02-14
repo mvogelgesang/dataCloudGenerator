@@ -4,10 +4,9 @@ import { Customer } from "../schemas/customer";
 
 export class CustomerDataGenerator extends AbstractDataGenerator<Customer> {
   generateData(numRecords: number, seed: boolean = false): GeneratedData<Customer> {
-    if (seed) {
-      faker.seed(this.seedValue);
-    }
-    const customerDate = faker.date.recent({ days: 60 });
+    // customers should always be seeded
+    faker.seed(this.seedValue);
+
     // Generate customer data and return it
     const customerData: Customer[] = Array(numRecords)
       .fill(null)
@@ -20,11 +19,8 @@ export class CustomerDataGenerator extends AbstractDataGenerator<Customer> {
           city: faker.location.city(),
           postalCode: faker.location.zipCode(),
           country: faker.location.country(),
-          createdAt: customerDate,
-          modifiedAt: faker.date.between({
-            from: customerDate,
-            to: faker.date.soon(),
-          }),
+          createdAt: faker.date.recent({ days: 60, refDate: "2024-01-01T00:00:00.000Z" }),
+          modifiedAt: new Date(),
         };
       });
 

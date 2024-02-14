@@ -9,10 +9,8 @@ import { Product } from "../schemas/product";
 
 export class ProductDataGenerator extends AbstractDataGenerator<Product> {
   generateData(count: number, seed: boolean = false) {
-    if (seed) {
-      faker.seed(this.seedValue);
-    }
-    const productDate = faker.date.recent({ days: 2 });
+    // for the purposes of this library, seed is always needed for products.
+    faker.seed(this.seedValue);
 
     const products: Product[] = [];
 
@@ -22,11 +20,8 @@ export class ProductDataGenerator extends AbstractDataGenerator<Product> {
         description: faker.commerce.productDescription(),
         name: faker.commerce.productName(),
         price: faker.number.float({ min: 1, max: 150, fractionDigits: 2 }),
-        createdAt: productDate,
-        modifiedAt: faker.date.between({
-          from: productDate,
-          to: faker.date.soon(),
-        }),
+        createdAt: faker.date.recent({ days: 2, refDate: "2024-01-01T00:00:00.000Z"}),
+        modifiedAt: new Date(),
       };
 
       products.push(product);
