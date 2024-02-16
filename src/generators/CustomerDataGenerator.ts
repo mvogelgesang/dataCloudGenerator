@@ -22,7 +22,7 @@ export class CustomerDataGenerator extends AbstractDataGenerator<Customer> {
           city: faker.location.city(),
           stateProvince: faker.location.state(),
           postalCode: faker.location.zipCode(),
-          country: faker.location.country(),
+          country: "United States of America",
           createdAt: faker.date.recent({ days: 60, refDate: "2024-01-01T00:00:00.000Z" }),
           modifiedAt: new Date(),
         };
