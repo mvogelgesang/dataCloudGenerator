@@ -18,7 +18,10 @@ export class ProductDataGenerator extends AbstractDataGenerator<Product> {
       const product: Product = {
         id: faker.commerce.isbn(),
         description: faker.commerce.productDescription(),
-        name: faker.commerce.productName(),
+        name: faker.commerce.product(),
+        colors: faker.helpers.multiple(faker.color.human, {count: {max: 8, min: 1}}),
+        sizes: faker.helpers.arrayElements(["XS", "S", "M", "L", "XL", "XXL"],faker.number.int({min:1,max:6})),
+        department: faker.commerce.department(),
         price: faker.number.float({ min: 1, max: 150, fractionDigits: 2 }),
         createdAt: faker.date.recent({ days: 2, refDate: "2024-01-01T00:00:00.000Z"}),
         modifiedAt: new Date(),
